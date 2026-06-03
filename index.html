@@ -2,9 +2,877 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=./CN%20Topadvert%20Trubkace.html">
-    <title>Topadvert — Cenová nabídka | ON BOARD</title>
-    <script>window.location.replace('./CN%20Topadvert%20Trubkace.html')</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trubkace.cz — Cenová nabídka | ON BOARD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 40px 20px 40px 60px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px 80px 60px 80px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; color: #5f8c94; margin-bottom: 20px; }
+        h1 { font-size: 2.5em; font-weight: 700; border-bottom: 4px solid #5f8c94; padding-bottom: 15px; margin-bottom: 30px; }
+        h2 { font-size: 2em; font-weight: 600; margin-top: 50px; margin-bottom: 30px; }
+        h3 { font-size: 1.5em; font-weight: 600; margin-bottom: 15px; }
+        h4 { font-size: 1.2em; font-weight: 600; margin-bottom: 10px; }
+        p { margin-bottom: 15px; font-size: 1em; }
+        .subtitle { font-size: 1.2em; color: #666; margin-bottom: 40px; }
+
+        /* ANIMATIONS */
+        .anim-hidden.fade-in { opacity: 0; transform: translateY(30px); }
+        .anim-hidden.slide-left { opacity: 0; transform: translateX(-40px); }
+        .anim-hidden.scale-in { opacity: 0; transform: scale(0.92); }
+        .fade-in { transition: opacity 0.7s ease-out, transform 0.7s ease-out; }
+        .slide-left { transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .scale-in { transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .anim-visible { opacity: 1 !important; transform: none !important; }
+        .stagger-children .fade-in:nth-child(1) { transition-delay: 0s; }
+        .stagger-children .fade-in:nth-child(2) { transition-delay: 0.12s; }
+        .stagger-children .fade-in:nth-child(3) { transition-delay: 0.24s; }
+        .stagger-children .fade-in:nth-child(4) { transition-delay: 0.36s; }
+        .stagger-children .fade-in:nth-child(5) { transition-delay: 0.48s; }
+        .stagger-children .fade-in:nth-child(6) { transition-delay: 0.60s; }
+        .header-animate h1 { animation: headerSlide 0.8s ease-out both; }
+        .header-animate .subtitle { animation: headerSlide 0.8s ease-out 0.15s both; }
+        @keyframes headerSlide { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* CARDS */
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 40px 0; }
+        .info-card { background-color: #fff; border: 2px solid #e0e0e0; border-radius: 8px; padding: 30px; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+        .info-card:hover { border-color: #5f8c94; box-shadow: 0 8px 24px rgba(95,140,148,0.18); }
+        .card-icon { width: 48px; height: 48px; background-color: #e8f4f5; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; transition: background-color 0.3s ease; flex-shrink: 0; }
+        .info-card:hover .card-icon { background-color: #5f8c94; }
+        .card-icon svg { width: 24px; height: 24px; stroke: #5f8c94; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.3s ease; }
+        .info-card:hover .card-icon svg { stroke: white; }
+        .info-card h3 { color: #5f8c94; }
+        .info-card p { color: #666; font-size: 0.95em; margin-bottom: 0; }
+        .info-card ul { margin: 10px 0 0 0; padding-left: 18px; }
+        .info-card li { color: #666; font-size: 0.92em; margin-bottom: 6px; }
+
+        /* ACCORDION CARDS */
+        .acc-card-header { cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .acc-card-header h3 { margin-bottom: 0; flex: 1; }
+        .acc-arrow { width: 18px; height: 18px; stroke: #5f8c94; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.3s ease; flex-shrink: 0; }
+        .acc-card.collapsed .acc-arrow { transform: rotate(-90deg); }
+        .acc-card-body { overflow: hidden; transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.3s ease; max-height: 500px; opacity: 1; margin-top: 12px; }
+        .acc-card.collapsed .acc-card-body { max-height: 0; opacity: 0; margin-top: 0; }
+        .dark-section .acc-arrow { stroke: #5f8c94; }
+
+        /* MAIN SERVICE BOX */
+        .main-service-box { background-color: #e8f4f5; border: 2px solid #5f8c94; border-radius: 8px; padding: 40px; margin: 40px 0; }
+        .main-service-box h2 { color: #5f8c94; margin-top: 0; }
+        .main-service-box p { font-size: 1.05em; line-height: 1.7; }
+
+        /* APPROACH */
+        .approach-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-top: 10px; }
+        .step-card { background-color: rgba(255,255,255,0.12); padding: 25px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.22); transition: background-color 0.3s ease, transform 0.3s ease; }
+        .step-card:hover { background-color: rgba(255,255,255,0.2); transform: translateY(-4px); }
+        .step-number { font-size: 2.4em; font-weight: 800; font-family: 'Montserrat', sans-serif; color: #5f8c94; margin-bottom: 10px; line-height: 1; }
+
+        /* TABLE NOTE */
+        .table-note { background-color: #fff9e6; border-left: 4px solid #f4c430; padding: 20px; margin: 20px 0; border-radius: 4px; font-size: 0.95em; line-height: 1.6; }
+
+        /* TIMELINE */
+        .timeline-v2 { margin: 40px 0; display: flex; flex-direction: column; gap: 0; position: relative; }
+        .timeline-v2::before { content: ''; position: absolute; left: 24px; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, #5f8c94, #b5d8df); border-radius: 3px; }
+        .tl-item { display: flex; align-items: flex-start; gap: 0; position: relative; padding: 0 0 40px 0; }
+        .tl-dot { position: relative; z-index: 2; flex-shrink: 0; width: 50px; display: flex; justify-content: center; padding-top: 18px; }
+        .tl-dot::after { content: ''; width: 16px; height: 16px; background-color: #5f8c94; border: 3px solid white; border-radius: 50%; box-shadow: 0 0 0 3px #5f8c94; display: block; }
+        .tl-body { flex: 1; background-color: #f8f9fa; border-radius: 8px; border-left: 4px solid #5f8c94; padding: 22px 28px; margin-left: 8px; }
+        .tl-label { display: inline-block; background-color: #5f8c94; color: white; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; padding: 4px 14px; border-radius: 4px; margin-bottom: 10px; }
+        .tl-body h4 { margin-top: 0; margin-bottom: 10px; color: #1d1d1b; }
+        .tl-body ul { margin-left: 18px; margin-top: 8px; }
+        .tl-body li { margin-bottom: 6px; color: #666; font-size: 0.95em; }
+
+        /* HERO PRICE */
+        .hero-price { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; background: linear-gradient(135deg, #5f8c94 0%, #4a7179 100%); border-radius: 14px; padding: 32px 40px; margin: 36px 0; box-shadow: 0 12px 40px rgba(95,140,148,0.3); }
+        .hero-price .hp-left h3 { color: #fff; margin: 0 0 6px 0; font-size: 1.3em; }
+        .hero-price .hp-left p { color: rgba(255,255,255,0.85); margin: 0; font-size: 0.95em; }
+        .hero-price .hp-right { text-align: right; }
+        .hero-price .hp-amount { font-family: 'Montserrat', sans-serif; font-size: 2.4em; font-weight: 800; color: #fff; line-height: 1; }
+        .hero-price .hp-note { color: rgba(255,255,255,0.8); font-size: 0.82em; margin-top: 6px; }
+
+        /* PRICE BLOCK */
+        .price-block { display: inline-flex; align-items: center; gap: 16px; background: linear-gradient(135deg, rgba(95,140,148,0.12) 0%, rgba(95,140,148,0.06) 100%); border: 2px solid rgba(95,140,148,0.3); border-radius: 12px; padding: 16px 28px; margin: 20px 0; }
+        .price-block .price-hours { font-family: 'Montserrat', sans-serif; font-size: 0.85em; color: #666; font-weight: 600; }
+        .price-block .price-amount { font-family: 'Montserrat', sans-serif; font-size: 1.4em; font-weight: 800; color: #5f8c94; }
+        .price-block .price-rate { font-size: 0.75em; color: #999; font-weight: 400; }
+
+        /* ROLE SPLIT */
+        .role-split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 30px 0; }
+        .role-col { border-radius: 12px; padding: 28px; border: 2px solid; }
+        .role-col h4 { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; font-size: 1.15em; }
+        .role-col ul { list-style: none; padding: 0; margin: 0; }
+        .role-col li { padding: 8px 0 8px 26px; position: relative; font-size: 0.95em; line-height: 1.5; }
+        .role-col li::before { content: '\2192'; position: absolute; left: 0; top: 8px; font-weight: 700; }
+        .role-client { background: #f0f7f8; border-color: #5f8c94; }
+        .role-client h4 { color: #5f8c94; }
+        .role-client li::before { color: #5f8c94; }
+        .role-agency { background: #1d1d1b; border-color: #1d1d1b; }
+        .role-agency h4 { color: #fff; }
+        .role-agency li { color: #d0d0d0; }
+        .role-agency li::before { color: #5f8c94; }
+        .role-tag { font-family: 'Montserrat', sans-serif; font-size: 0.68em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 3px 10px; border-radius: 20px; background: #5f8c94; color: #fff; }
+
+        /* ADDON */
+        .addon-section { background-color: #f0f7f8; padding: 40px; border-radius: 8px; border: 2px dashed #5f8c94; margin: 40px 0; }
+        .addon-badge { display: inline-block; background-color: #5f8c94; color: white; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; padding: 6px 16px; border-radius: 20px; margin-bottom: 20px; }
+
+        /* CTA */
+        .cta-button { display: inline-block; background: linear-gradient(135deg, #5f8c94 0%, #4a7179 100%); color: white; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15em; padding: 18px 48px; border-radius: 8px; text-decoration: none; margin-top: 10px; transition: all 0.35s ease; box-shadow: 0 4px 16px rgba(95,140,148,0.3); }
+        .cta-button:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(95,140,148,0.45); }
+
+        /* DARK SECTION */
+        .dark-section { background-color: #141414; color: #e0e0e0; margin: 60px -80px; padding: 60px 80px; position: relative; overflow: hidden; }
+        .dark-section::before { content: ''; position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(95,140,148,0.18) 0%, transparent 70%); filter: blur(60px); animation: glowFloat 12s ease-in-out infinite alternate; pointer-events: none; z-index: 0; top: -100px; left: -100px; }
+        @keyframes glowFloat { 0% { transform: translate(0,0) scale(1); } 33% { transform: translate(200px,150px) scale(1.2); } 66% { transform: translate(-100px,300px) scale(0.9); } 100% { transform: translate(300px,50px) scale(1.1); } }
+        .dark-section > * { position: relative; z-index: 1; }
+        .dark-section h2 { color: #5f8c94; }
+        .dark-section h3 { color: #ffffff; }
+        .dark-section h4 { color: #ffffff; }
+        .dark-section p { color: #c0c0c0; }
+        .dark-section .info-card { background-color: rgba(255,255,255,0.04); border-color: rgba(95,140,148,0.3); }
+        .dark-section .info-card:hover { border-color: #5f8c94; box-shadow: 0 8px 24px rgba(95,140,148,0.3); }
+        .dark-section .info-card h3 { color: #5f8c94; }
+        .dark-section .info-card p, .dark-section .info-card li { color: #b0b0b0; }
+        .dark-section .card-icon { background-color: rgba(95,140,148,0.18); }
+        .dark-section .info-card:hover .card-icon { background-color: #5f8c94; }
+        .dark-section .card-icon svg { stroke: #5f8c94; }
+        .dark-section .info-card:hover .card-icon svg { stroke: white; }
+        .dark-section .table-note { background-color: rgba(95,140,148,0.1); border-left-color: #5f8c94; color: #c0c0c0; }
+        .dark-section .table-note strong { color: #ffffff; }
+        .dark-section .tl-body { background-color: rgba(255,255,255,0.05); }
+        .dark-section .tl-body h4 { color: #ffffff; }
+        .dark-section .tl-body li { color: #b0b0b0; }
+        .dark-section .tl-dot::after { border-color: #141414; }
+        .dark-section .step-card { background-color: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.15); }
+        .dark-section .step-card:hover { background-color: rgba(255,255,255,0.12); }
+        .dark-section .price-block { background: rgba(95,140,148,0.15); border-color: rgba(95,140,148,0.4); }
+        .dark-section .price-block .price-hours { color: #b0b0b0; }
+        .dark-section .price-block .price-amount { color: #ffffff; }
+
+        /* MODERN PRICE TABLE */
+        .ptable { display: flex; flex-direction: column; gap: 3px; margin: 30px 0; border-radius: 14px; overflow: hidden; }
+        .ptable-head { display: grid; grid-template-columns: 3fr 1fr 1.5fr; padding: 14px 20px; background: rgba(95,140,148,0.25); }
+        .ptable-head span { font-family: 'Montserrat', sans-serif; font-size: 0.78em; font-weight: 700; color: #5f8c94; text-transform: uppercase; letter-spacing: 0.5px; }
+        .ptable-phase { cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: space-between; padding: 11px 20px; background: rgba(95,140,148,0.2); border-top: 1px solid rgba(95,140,148,0.3); margin-top: 4px; transition: background 0.2s; }
+        .ptable-phase:hover { background: rgba(95,140,148,0.28); }
+        .ptable-phase span { font-family: 'Montserrat', sans-serif; font-size: 0.8em; font-weight: 800; color: #5f8c94; text-transform: uppercase; letter-spacing: 0.8px; }
+        .ptable-phase .phase-arrow { width: 16px; height: 16px; stroke: #5f8c94; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.3s ease; flex-shrink: 0; }
+        .ptable-phase.collapsed .phase-arrow { transform: rotate(-90deg); }
+        .ptable-row { display: grid; grid-template-columns: 3fr 1fr 1.5fr; padding: 14px 20px; align-items: center; transition: background 0.2s; }
+        .ptable-row:nth-child(odd) { background: rgba(255,255,255,0.03); }
+        .ptable-row:nth-child(even) { background: rgba(255,255,255,0.06); }
+        .ptable-row:hover { background: rgba(95,140,148,0.12); }
+        .ptable-row .pt-service { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 0.9em; color: #e0e0e0; }
+        .ptable-row .pt-hours { color: #999; font-size: 0.9em; }
+        .ptable-row .pt-price { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ffffff; font-size: 0.95em; }
+        .ptable-row.pt-total { background: rgba(95,140,148,0.12); }
+        .ptable-row.pt-total .pt-service { color: #7fc5cf; font-weight: 700; font-size: 0.88em; }
+        .ptable-row.pt-total .pt-hours { color: #7fc5cf; }
+        .ptable-row.pt-total .pt-price { color: #7fc5cf; }
+        .ptable-row.pt-grand { background: linear-gradient(135deg, rgba(95,140,148,0.4) 0%, rgba(95,140,148,0.2) 100%); border-top: 2px solid rgba(95,140,148,0.5); }
+        .ptable-row.pt-grand .pt-service { color: #ffffff; font-weight: 800; font-size: 1em; }
+        .ptable-row.pt-grand .pt-hours { color: #b0d8de; font-weight: 700; }
+        .ptable-row.pt-grand .pt-price { color: #5f8c94; font-size: 1.2em; font-weight: 800; }
+        .ptable-row.phase-hidden { display: none; }
+
+        /* VIDEO FOOTER */
+        .video-footer-section { margin: 0 -80px -60px -80px; overflow: hidden; background: #000; }
+        .video-footer-section video { width: 100%; display: block; max-height: 260px; object-fit: contain; }
+
+        /* DOCK NAV */
+        .dock-nav { position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 9000; display: flex; flex-direction: column; gap: 2px; padding: 14px 12px 14px 10px; background: rgba(20,20,20,0.82); backdrop-filter: blur(24px) saturate(1.8); -webkit-backdrop-filter: blur(24px) saturate(1.8); border-radius: 0 16px 16px 0; border: 1px solid rgba(255,255,255,0.08); border-left: none; box-shadow: 4px 0 30px rgba(0,0,0,0.3); width: 40px; overflow: hidden; transition: width 0.35s cubic-bezier(0.4,0,0.2,1), padding 0.35s cubic-bezier(0.4,0,0.2,1); }
+        .dock-nav:hover { width: 210px; padding: 14px 16px 14px 14px; }
+        .dock-menu-label { position: fixed; left: 5px; top: 50%; transform: translateY(-50%) rotate(-90deg); transform-origin: center center; font-family: 'Montserrat', sans-serif; font-size: 0.65em; font-weight: 800; letter-spacing: 4px; text-transform: uppercase; color: #5f8c94; white-space: nowrap; pointer-events: none; z-index: 9001; transition: opacity 0.25s ease; }
+        .dock-nav:hover ~ .dock-menu-label { opacity: 0; }
+        .dock-nav a { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 8px; text-decoration: none; opacity: 0; transition: opacity 0.2s ease, background 0.2s ease; }
+        .dock-nav:hover a { opacity: 1; }
+        .dock-nav a:hover { background: rgba(95,140,148,0.22); }
+        .dock-nav a.active { background: rgba(95,140,148,0.28); }
+        .dock-nav .dock-icon { width: 20px; height: 20px; flex-shrink: 0; stroke: rgba(255,255,255,0.5); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.2s ease; }
+        .dock-nav a:hover .dock-icon, .dock-nav a.active .dock-icon { stroke: #5f8c94; }
+        .dock-nav .dock-label { font-family: 'Montserrat', sans-serif; font-size: 0.78em; font-weight: 700; color: rgba(255,255,255,0.85); white-space: nowrap; }
+        .dock-nav a.active .dock-label { color: #5f8c94; }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            body { padding: 20px; }
+            .container { padding: 30px 20px; }
+            h1 { font-size: 1.8em; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .dark-section { margin: 40px -20px; padding: 40px 20px; }
+            .video-footer-section { margin: 40px -20px -30px -20px; }
+            .role-split { grid-template-columns: 1fr; }
+            .approach-steps { grid-template-columns: 1fr; }
+            .hero-price { flex-direction: column; }
+            .hero-price .hp-right { text-align: left; }
+            .dock-nav { display: none; }
+            .dock-menu-label { display: none; }
+            .ptable-head, .ptable-row { grid-template-columns: 1fr; }
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; padding: 20px; }
+            .anim-hidden { opacity: 1 !important; transform: none !important; }
+            .dock-nav, .dock-menu-label { display: none; }
+            .dark-section { margin: 40px -20px; }
+            .acc-card-body { max-height: 1000px !important; opacity: 1 !important; margin-top: 12px !important; }
+            .ptable-row.phase-hidden { display: grid !important; }
+        }
+
+        /* CONTACT LINKS */
+        .contact-link { color: #888; text-decoration: none; transition: color 0.25s ease; }
+        .contact-link:hover { color: #fff; font-weight: 700; }
+    </style>
 </head>
-<body></body>
+<body>
+
+<div class="container">
+
+    <!-- LOGOS -->
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:36px; padding-bottom:24px; border-bottom:1px solid #e8e8e8;">
+        <a href="https://www.on-board.cz" target="_blank" rel="noopener">
+            <img src="logo_black (kopie).svg" alt="ON BOARD" style="height:52px;">
+        </a>
+        <img src="logo top advert.webp" alt="Topadvert" style="height:36px;">
+    </div>
+
+    <!-- HEADER -->
+    <div class="header-animate">
+        <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom:22px;">
+            <span style="font-family:'Montserrat',sans-serif; font-size:1.1em; font-weight:800; letter-spacing:1px; color:#1d1d1b; text-transform:uppercase;">Topadvert</span>
+            <span style="font-family:'Montserrat',sans-serif; font-size:0.9em; font-weight:700; color:#5f8c94;">trubkace.cz</span>
+            <span style="font-family:'Montserrat',sans-serif; font-size:0.75em; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#999; border-left:2px solid #e0e0e0; padding-left:18px;">Cenová nabídka<br>od ON BOARD</span>
+        </div>
+        <h1>Produktová microsite s&nbsp;konfigurátorem a&nbsp;online platbou</h1>
+        <p class="subtitle">Cenová nabídka tvorby microsite pro trubkové reklamní rámy na doméně trubkace.cz</p>
+    </div>
+
+    <!-- META STRIP -->
+    <div style="display:flex; gap:30px; flex-wrap:wrap; background:#f0f7f8; border-radius:8px; padding:20px 28px; margin-bottom:50px; border:1px solid #d0e8eb;">
+        <div><span style="font-family:'Montserrat',sans-serif;font-size:0.72em;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#5f8c94;display:block;margin-bottom:2px;">Klient</span><span style="font-size:0.95em;color:#333;">Topadvert / trubkace.cz</span></div>
+        <div><span style="font-family:'Montserrat',sans-serif;font-size:0.72em;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#5f8c94;display:block;margin-bottom:2px;">Datum</span><span style="font-size:0.95em;color:#333;">Červen 2026</span></div>
+        <div><span style="font-family:'Montserrat',sans-serif;font-size:0.72em;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#5f8c94;display:block;margin-bottom:2px;">Hodinová sazba</span><span style="font-size:0.95em;color:#333;">1 500 Kč / hod bez DPH</span></div>
+    </div>
+
+    <!-- O PROJEKTU -->
+    <div id="projekt" class="main-service-box fade-in">
+        <h2>O projektu</h2>
+        <p>Navrhujeme vytvoření <strong>samostatné produktové microsite Trubkace.cz</strong> zaměřené na jediný produkt — <strong>trubkové reklamní rámy</strong> Topadvert. Zákazník si sám nakonfiguruje rám (typ, velikost, varianta tisku), nahraje tisková data nebo zvolí jejich pozdější dodání a celou objednávku dokončí online včetně platby.</p>
+        <p style="margin-bottom:0;">Řešení bude funkčně vycházet z principu webu <strong>VlajkyOnline.cz</strong>. Graficky navazujeme na vizuální styl Topadvert. Microsite bude postavena jako <strong>zakázkové webové řešení s vlastním administračním prostředím</strong> — bez závislosti na externích platformách, plně pod kontrolou klienta.</p>
+    </div>
+
+    <!-- NAVRŽENÝ ROZSAH -->
+    <h2 id="rozsah" class="fade-in">Navržený rozsah microsite</h2>
+    <p>Konfigurátor pokryje <strong>3 typy rámů ve 14 velikostech</strong> a umožní zákazníkovi projít celý nákupní proces od výběru produktu po online platbu. Kliknutím na sekci zobrazíte detail.</p>
+
+    <table style="border-collapse:collapse; margin:20px auto 32px auto; font-family:'Montserrat',sans-serif; font-size:0.88em; text-align:center;">
+        <thead>
+            <tr>
+                <th style="padding:8px 40px; color:#5f8c94; font-size:0.75em; text-transform:uppercase; letter-spacing:0.5px; border-bottom:2px solid #5f8c94; font-weight:700; border-right:1px solid #e8e8e8;">Slim</th>
+                <th style="padding:8px 40px; color:#5f8c94; font-size:0.75em; text-transform:uppercase; letter-spacing:0.5px; border-bottom:2px solid #5f8c94; font-weight:700; border-right:1px solid #e8e8e8;">Rovná stěna</th>
+                <th style="padding:8px 40px; color:#5f8c94; font-size:0.75em; text-transform:uppercase; letter-spacing:0.5px; border-bottom:2px solid #5f8c94; font-weight:700;">Oblá stěna</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding:10px 40px; border-right:1px solid #e8e8e8; border-bottom:1px solid #e8e8e8;"><span style="font-size:1.5em; font-weight:800; color:#5f8c94;">4</span> <span style="color:#999; font-size:0.85em;">velikosti</span></td>
+                <td style="padding:10px 40px; border-right:1px solid #e8e8e8; border-bottom:1px solid #e8e8e8;"><span style="font-size:1.5em; font-weight:800; color:#5f8c94;">5</span> <span style="color:#999; font-size:0.85em;">velikostí</span></td>
+                <td style="padding:10px 40px; border-bottom:1px solid #e8e8e8;"><span style="font-size:1.5em; font-weight:800; color:#5f8c94;">5</span> <span style="color:#999; font-size:0.85em;">velikostí</span></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="padding:10px 40px; color:#666; font-size:0.9em;">Varianty tisku: <strong style="color:#1d1d1b;">1stranný tisk</strong> &nbsp;·&nbsp; <strong style="color:#1d1d1b;">2stranný tisk</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="cards-grid stagger-children" style="grid-template-columns: repeat(3, 1fr);">
+
+        <div class="info-card acc-card fade-in collapsed">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <div class="acc-card-header">
+                <h3>Landing page</h3>
+                <svg class="acc-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="acc-card-body">
+                <ul>
+                    <li>Hero sekce s jednoduchou video animací (3 vrstvy, postupné načítání)</li>
+                    <li>Základní představení produktu a CTA</li>
+                    <li>Sekce ukázky reklamních rámů</li>
+                    <li>Sekce „Jak to funguje?"</li>
+                    <li>Grafika navazující na styl Topadvert</li>
+                    <li>Plně responzivní design (desktop i mobil)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="info-card acc-card fade-in collapsed">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+            </div>
+            <div class="acc-card-header">
+                <h3>Konfigurátor produktu</h3>
+                <svg class="acc-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="acc-card-body">
+                <ul>
+                    <li>Slim (4 vel.), Rovná stěna (5 vel.), Oblá stěna (5 vel.)</li>
+                    <li>Varianty tisku: jednostranný / oboustranný</li>
+                    <li>Dynamický výpočet ceny v reálném čase</li>
+                    <li>Stažení tiskové šablony ke každé variantě</li>
+                    <li>Volitelný checkbox: „Potřebuji pomoct s grafikou"</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="info-card acc-card fade-in collapsed">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <div class="acc-card-header">
+                <h3>Upload tiskových dat</h3>
+                <svg class="acc-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="acc-card-body">
+                <ul>
+                    <li>Nahrání tiskových souborů (PDF, JPG) při objednávce</li>
+                    <li>Alternativa: „dodám data later" — výzva e-mailem</li>
+                    <li>Bezpečné uložení nahraných souborů</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="info-card acc-card fade-in collapsed">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            </div>
+            <div class="acc-card-header">
+                <h3>Objednávkový proces</h3>
+                <svg class="acc-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="acc-card-body">
+                <ul>
+                    <li>Košík s přehledem a úpravou objednávky</li>
+                    <li>Checkout: kontaktní, fakturační a dodací údaje</li>
+                    <li>Nákup na firmu</li>
+                    <li>Stávající zákazník — platba na fakturu (online platba se přeskočí)</li>
+                    <li>Volba dopravy a platební metody</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="info-card acc-card fade-in collapsed">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </div>
+            <div class="acc-card-header">
+                <h3>Online platba (ThePay)</h3>
+                <svg class="acc-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="acc-card-body">
+                <ul>
+                    <li>Platba kartou, bankovním převodem, dobírkou</li>
+                    <li>Plné napojení platební brány ThePay</li>
+                    <li>Webhook zpracování, správa stavů objednávky</li>
+                    <li>Potvrzení platby zákazníkovi</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="info-card acc-card fade-in collapsed">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div class="acc-card-header">
+                <h3>Notifikace &amp; evidence</h3>
+                <svg class="acc-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="acc-card-body">
+                <ul>
+                    <li>Potvrzení objednávky zákazníkovi e-mailem</li>
+                    <li>Notifikace nové objednávky na e-mail obchodníka (vč. příloh a detailu)</li>
+                    <li>Automatická výzva k dodání tiskových dat</li>
+                    <li>GA4 konverze</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="table-note fade-in" style="margin-top: 0;">
+        <strong>Co není součástí základní nabídky:</strong> Online editor grafiky, automatický náhled a technická kontrola tiskových dat, zákaznické účty s individuálními ceníky, napojení na CRM/ERP/skladový systém. Základní nabídka zahrnuje standardní UI animace (scroll efekty, hover přechody, animace sekcí) — komplexní nebo zakázkové animace nad tento rámec jsou vícepráce.
+    </div>
+
+
+    <!-- CENOVÁ NABÍDKA (DARK) -->
+    <div id="cena" class="dark-section">
+        <h2 style="margin-top:0;">Cenová nabídka</h2>
+        <p>Hodinová sazba: <strong style="color:#5f8c94;">1 500 Kč / hod bez DPH</strong>. Kliknutím na fázi zobrazíte nebo skryjete detail položek.</p>
+
+        <div class="ptable fade-in">
+            <div class="ptable-head">
+                <span>Položka</span>
+                <span>Hodiny</span>
+                <span>Cena bez DPH</span>
+            </div>
+
+            <!-- FÁZE 1 -->
+            <div class="ptable-phase collapsed" data-phase="1">
+                <span>Fáze 1 — UX &amp; UI návrh (Figma)</span>
+                <svg class="phase-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="ptable-row" data-phase-row="1">
+                <span class="pt-service">Projektová příprava a specifikace zadání</span>
+                <span class="pt-hours">3 h</span>
+                <span class="pt-price">4 500 Kč</span>
+            </div>
+            <div class="ptable-row" data-phase-row="1">
+                <span class="pt-service">UX &amp; UI návrh v Figma — wireframy + grafický návrh (6 šablon: landing, konfigurátor, košík, checkout, potvrzení, šablony)</span>
+                <span class="pt-hours">10–14 h</span>
+                <span class="pt-price">15 000 – 21 000 Kč</span>
+            </div>
+            <div class="ptable-row pt-total" data-phase-row="1">
+                <span class="pt-service">Mezisoučet Fáze 1</span>
+                <span class="pt-hours">13–17 h</span>
+                <span class="pt-price">19 500 – 25 500 Kč</span>
+            </div>
+
+            <!-- FÁZE 2 -->
+            <div class="ptable-phase collapsed" data-phase="2">
+                <span>Fáze 2 — Vývoj microsite</span>
+                <svg class="phase-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="ptable-row" data-phase-row="2">
+                <span class="pt-service">Kódování microsite + tvorba hero video animace (3 vrstvy, landing page)</span>
+                <span class="pt-hours">10–12 h</span>
+                <span class="pt-price">15 000 – 18 000 Kč</span>
+            </div>
+            <div class="ptable-row" data-phase-row="2">
+                <span class="pt-service">Konfigurátor produktu (3 typy × 14 vel. × 3 varianty tisku, dynamická cena, šablony ke stažení)</span>
+                <span class="pt-hours">11–13 h</span>
+                <span class="pt-price">16 500 – 19 500 Kč</span>
+            </div>
+            <div class="ptable-row" data-phase-row="2">
+                <span class="pt-service">Tiskové šablony ke stažení + bezpečný upload tiskových dat</span>
+                <span class="pt-hours">5 h</span>
+                <span class="pt-price">7 500 Kč</span>
+            </div>
+            <div class="ptable-row" data-phase-row="2">
+                <span class="pt-service">Objednávkový proces — košík, checkout, fakturační a dodací údaje; platba na fakturu pro stávající zákazníky</span>
+                <span class="pt-hours">6 h</span>
+                <span class="pt-price">9 000 Kč</span>
+            </div>
+            <div class="ptable-row" data-phase-row="2">
+                <span class="pt-service">Doprava a platební metody — logika výpočtu, volba zákazníkem</span>
+                <span class="pt-hours">4 h</span>
+                <span class="pt-price">6 000 Kč</span>
+            </div>
+            <div class="ptable-row" data-phase-row="2">
+                <span class="pt-service">Napojení platební brány ThePay — API, webhook, stavy objednávky</span>
+                <span class="pt-hours">6 h</span>
+                <span class="pt-price">9 000 Kč</span>
+            </div>
+            <div class="ptable-row" data-phase-row="2">
+                <span class="pt-service">E-mailové notifikace — potvrzení, interní notif., výzva k dodání dat</span>
+                <span class="pt-hours">2 h</span>
+                <span class="pt-price">3 000 Kč</span>
+            </div>
+            <div class="ptable-row" data-phase-row="2">
+                <span class="pt-service">Základní animace UI — scroll efekty, hover přechody, animace sekcí (landing page)</span>
+                <span class="pt-hours">2 h</span>
+                <span class="pt-price">3 000 Kč</span>
+            </div>
+            <div class="ptable-row" data-phase-row="2">
+                <span class="pt-service">GDPR &amp; cookie consent — cookie lišta, kategorie souhlasů, propojení s GA4, stránka ochrany osobních údajů</span>
+                <span class="pt-hours">2 h</span>
+                <span class="pt-price">3 000 Kč</span>
+            </div>
+            <div class="ptable-row pt-total" data-phase-row="2">
+                <span class="pt-service">Mezisoučet Fáze 2</span>
+                <span class="pt-hours">48–52 h</span>
+                <span class="pt-price">72 000 – 78 000 Kč</span>
+            </div>
+
+            <!-- FÁZE 3 -->
+            <div class="ptable-phase collapsed" data-phase="3">
+                <span>Fáze 3 — Testování &amp; spuštění</span>
+                <svg class="phase-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="ptable-row" data-phase-row="3">
+                <span class="pt-service">Testování, ladění detailů a nasazení na doménu klienta</span>
+                <span class="pt-hours">4–6 h</span>
+                <span class="pt-price">6 000 – 9 000 Kč</span>
+            </div>
+            <div class="ptable-row" data-phase-row="3">
+                <span class="pt-service">Měření konverzí — Google Analytics 4, základní technické SEO</span>
+                <span class="pt-hours">2 h</span>
+                <span class="pt-price">3 000 Kč</span>
+            </div>
+            <div class="ptable-row" data-phase-row="3">
+                <span class="pt-service">ThePay produkční napojení — přepnutí na produkční API, testovací platba naostro, ověření webhooků v produkci</span>
+                <span class="pt-hours">3 h</span>
+                <span class="pt-price">4 500 Kč</span>
+            </div>
+            <div class="ptable-row pt-total" data-phase-row="3">
+                <span class="pt-service">Mezisoučet Fáze 3</span>
+                <span class="pt-hours">9–11 h</span>
+                <span class="pt-price">13 500 – 16 500 Kč</span>
+            </div>
+
+            <div class="ptable-row pt-grand">
+                <span class="pt-service">Základní řešení celkem</span>
+                <span class="pt-hours">70–80 h</span>
+                <span class="pt-price">105 000 – 120 000 Kč</span>
+            </div>
+
+        </div>
+
+        <p style="font-size:0.82em; color:rgba(255,255,255,0.45); margin-top:12px;">* Projekt má jasné checkpointy. Změny nebo návrat k jinému návrhu po odsouhlasení milníku se účtují jako vícepráce.</p>
+
+    </div>
+
+
+    <!-- VOLITELNÉ ROZŠÍŘENÍ -->
+    <h2 class="fade-in">Volitelné rozšíření</h2>
+    <p>Níže uvedené funkce nejsou součástí základního rozsahu. Lze je realizovat jako samostatnou druhou fázi projektu.</p>
+
+    <div class="addon-section fade-in">
+        <span class="addon-badge">Volitelně — orientační vizualizace tiskových dat</span>
+        <h3 style="margin-top:15px; margin-bottom:10px; color:#5f8c94;">Náhled nahrané grafiky na rámu</h3>
+        <p style="color:#666;">Orientační vizualizace nahraných tiskových dat na vybraném typu rámu — zákazník vidí přibližný výsledek ještě před odesláním objednávky. Jedná se o ilustrativní náhled, nikoliv technickou kontrolu tiskových dat.</p>
+        <div class="price-block" style="margin-top:20px; margin-bottom:0;">
+            <span class="price-hours">od 25 hodin</span>
+            <span class="price-amount">od 37 500 Kč</span>
+            <span class="price-rate">orientační cena · bez DPH · upřesní se na základě zadání</span>
+        </div>
+    </div>
+
+
+    <!-- TECHNICKÉ ŘEŠENÍ (DARK) -->
+    <div id="reseni" class="dark-section">
+        <h2 style="margin-top:0;">Technické řešení</h2>
+        <p>Microsite bude postavena jako <strong>zakázkové webové řešení</strong> — žádná šablona, žádná závislost na externích platformách. Klient dostane plnohodnotnou aplikaci postavenou přesně na míru jeho potřebám, s vlastním administračním prostředím a plnou kontrolou nad kódem i daty.</p>
+
+        <div class="cards-grid stagger-children" style="margin-top:30px;">
+            <div class="info-card acc-card fade-in collapsed">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                </div>
+                <div class="acc-card-header">
+                    <h3>Zakázkové webové řešení</h3>
+                    <svg class="acc-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="acc-card-body">
+                    <ul>
+                        <li>Vývoj na míru — ne šablona, ale plnohodnotná aplikace</li>
+                        <li>Plná kontrola nad kódem, daty i funkcionalitou</li>
+                        <li>Bez závislosti na externích e-shop platformách</li>
+                        <li>Možnost budoucího rozšíření bez omezení platformy</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-card acc-card fade-in collapsed">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </div>
+                <div class="acc-card-header">
+                    <h3>Notifikace objednávek e-mailem</h3>
+                    <svg class="acc-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="acc-card-body">
+                    <ul>
+                        <li>Každá objednávka dorazí na e-mail obchodníka s kompletním detailem</li>
+                        <li>Obchodník vše eviduje ve svém interním systému — web žádný dashboard nepotřebuje</li>
+                        <li>Nahrané tiskové soubory přiloženy přímo v notifikaci</li>
+                        <li>Zákazník dostane potvrzení objednávky a výzvu k dodání dat</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-card acc-card fade-in collapsed">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                </div>
+                <div class="acc-card-header">
+                    <h3>Platební brána ThePay</h3>
+                    <svg class="acc-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="acc-card-body">
+                    <ul>
+                        <li>Karta, bankovní převod, dobírka a další metody</li>
+                        <li>Napojení přes ThePay API, webhook zpracování</li>
+                        <li>Sandbox prostředí pro testování plateb</li>
+                        <li>ThePay účet a provozní poplatky zajišťuje klient</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-note">
+            <strong>Mimo základní rozsah:</strong> napojení na skladový systém myWAC, napojení na dopravce a generování přepravních štítků, automatické párování bankovních převodů, napojení na účetní software ani CRM.
+        </div>
+    </div>
+
+
+    <!-- HARMONOGRAM -->
+    <h2 id="harmonogram" class="fade-in">Harmonogram realizace</h2>
+    <p>Předpokládaná délka realizace: <strong>5–7 týdnů</strong> od dodání podkladů klientem a schválení zadání. Harmonogram závisí na rychlosti součinnosti klienta — schvalování milníků do 3 pracovních dnů.</p>
+
+    <div class="timeline-v2" style="margin-top:30px;">
+        <div class="tl-item fade-in">
+            <div class="tl-dot"></div>
+            <div class="tl-body">
+                <span class="tl-label">Fáze 1 · 1–3 týdny</span>
+                <h4>UX &amp; UI návrh (Figma)</h4>
+                <ul>
+                    <li>Kick-off schůzka, předání a ověření podkladů</li>
+                    <li>Finalizace specifikace — cenová logika, konfigurace produktů, pravidla uploadu</li>
+                    <li>UX &amp; UI návrh — wireframy + grafický návrh (konfigurátor, checkout, landing)</li>
+                    <li>Prezentace a odsouhlasení návrhu s klientem</li>
+                </ul>
+            </div>
+        </div>
+        <div class="tl-item fade-in">
+            <div class="tl-dot"></div>
+            <div class="tl-body">
+                <span class="tl-label">Fáze 2 · ~3 týdny</span>
+                <h4>Vývoj microsite</h4>
+                <ul>
+                    <li>Landing page a hero video animace (3 vrstvy)</li>
+                    <li>Konfigurátor s cenovou logikou a stažením šablon</li>
+                    <li>Upload tiskových dat, košík, checkout</li>
+                    <li>Doprava, platební brána ThePay, webhooky</li>
+                    <li>E-mailové notifikace a vlastní administrační prostředí</li>
+                </ul>
+            </div>
+        </div>
+        <div class="tl-item fade-in">
+            <div class="tl-dot"></div>
+            <div class="tl-body">
+                <span class="tl-label">Fáze 3 · ~1 týden</span>
+                <h4>Testování &amp; spuštění</h4>
+                <ul>
+                    <li>Cross-browser a mobilní testování</li>
+                    <li>Testovací platby v ThePay sandboxu + produkční ověření</li>
+                    <li>Nasazení na doménu klienta, konfigurace DNS</li>
+                    <li>Nastavení Google Analytics 4, základní technické SEO</li>
+                    <li>Předání přístupů klientovi</li>
+                </ul>
+                <p style="margin-top:12px; font-size:0.85em; color:#999;">* Pro dodržení termínu je klíčová součinnost klienta — schválení každého milníku do 3 pracovních dnů.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- PŘEDPOKLADY SPOLUPRÁCE -->
+    <h2 id="podklady" class="fade-in" style="margin-top:60px;">Předpoklady spolupráce</h2>
+    <p>Pro zahájení projektu a plynulou realizaci potřebujeme tyto podklady a přístupy.</p>
+
+    <div class="role-split fade-in">
+        <div class="role-col role-client">
+            <h4><span class="role-tag">Klient dodá</span></h4>
+            <ul>
+                <li>Finální seznam typů rámů, velikostí a variant tisku</li>
+                <li>Ceník — tabulka kombinací: typ × velikost × varianta tisku</li>
+                <li>Tiskové šablony ke stažení (pro každý typ a velikost)</li>
+                <li>Pravidla pro nahrávání tiskových dat (formát, rozlišení, limity)</li>
+                <li>Grafické podklady a logomanual (navazuje na Topadvert)</li>
+                <li>Textové podklady k produktu</li>
+                <li>Seznam dopravců, platebních metod, podmínek dopravy a cen</li>
+                <li>Přístupy: ThePay účet, GA4, doména klienta (DNS)</li>
+            </ul>
+        </div>
+        <div class="role-col role-agency">
+            <h4><span class="role-tag">ON BOARD zajistí</span></h4>
+            <ul>
+                <li>UX &amp; UI návrh (Figma) — wireframy + grafický návrh 6 šablon</li>
+                <li>Tvorba jednoduché hero animace (3 vrstvy) pro landing page</li>
+                <li>Základní UI animace — scroll efekty, hover přechody, animace sekcí</li>
+                <li>Vývoj webové aplikace s konfigurátorem na míru</li>
+                <li>Implementaci cenové logiky dle dodané tabulky</li>
+                <li>Systém pro upload a správu tiskových souborů</li>
+                <li>Napojení platební brány ThePay (vč. produkčního ověření)</li>
+                <li>E-mailové notifikace objednávek (zákazník i obchodník)</li>
+                <li>SSL certifikát, technické SEO a GA4</li>
+                <li>Architektura webu připravená pro budoucí jazykové mutace (i18n)</li>
+                <li>Testování a předání přístupů</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- PLATEBNÍ PODMÍNKY + CTA (DARK) -->
+    <div id="platba" class="dark-section" style="background-color:#000; margin-bottom:0;">
+        <h2 style="margin-top:0;">Platební podmínky</h2>
+        <p>Cena projektu bude hrazena ve třech splátkách navázaných na milníky projektu. Všechny ceny jsou bez DPH.</p>
+
+        <div class="approach-steps stagger-children" style="margin-top:30px; grid-template-columns: repeat(3, 1fr);">
+            <div class="step-card fade-in" style="text-align:center;">
+                <div class="step-number">30 %</div>
+                <h4 style="margin-top:8px;">Záloha po zahájení</h4>
+                <p style="color:rgba(255,255,255,0.7); font-size:0.9em; margin-bottom:4px;">31 500 – 36 000 Kč bez DPH</p>
+                <p style="color:rgba(255,255,255,0.45); font-size:0.82em; margin-bottom:0;">Po podpisu smlouvy, před zahájením prací</p>
+            </div>
+            <div class="step-card fade-in" style="text-align:center;">
+                <div class="step-number">30 %</div>
+                <h4 style="margin-top:8px;">Odsouhlasená grafika</h4>
+                <p style="color:rgba(255,255,255,0.7); font-size:0.9em; margin-bottom:4px;">31 500 – 36 000 Kč bez DPH</p>
+                <p style="color:rgba(255,255,255,0.45); font-size:0.82em; margin-bottom:0;">Po odsouhlasení UX &amp; UI návrhu klientem</p>
+            </div>
+            <div class="step-card fade-in" style="text-align:center;">
+                <div class="step-number">40 %</div>
+                <h4 style="margin-top:8px;">Nakódování a předání</h4>
+                <p style="color:rgba(255,255,255,0.7); font-size:0.9em; margin-bottom:4px;">42 000 – 48 000 Kč bez DPH</p>
+                <p style="color:rgba(255,255,255,0.45); font-size:0.82em; margin-bottom:0;">Nasazení na doménu klienta, předání přístupů</p>
+            </div>
+        </div>
+
+        <div style="text-align:center; margin-top:60px; padding-top:50px; border-top:2px solid rgba(95,140,148,0.25);">
+            <a href="mailto:info@on-board.cz" class="cta-button">Domluvme se na dalším kroku</a>
+            <p style="font-size:0.88em; margin-top:20px;">
+                <a href="mailto:info@on-board.cz" class="contact-link">info@on-board.cz</a>
+                &nbsp;·&nbsp;
+                <a href="https://www.on-board.cz" target="_blank" rel="noopener" class="contact-link">www.on-board.cz</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- VIDEO FOOTER -->
+    <div class="video-footer-section">
+        <video autoplay muted loop playsinline>
+            <source src="V4-Final (kopie).mp4" type="video/mp4">
+        </video>
+    </div>
+
+</div><!-- /container -->
+
+<!-- DOCK NAVIGATION -->
+<span class="dock-menu-label" id="dock-menu-text">MENU</span>
+<div class="dock-nav" id="dock-nav">
+    <a href="#projekt" data-section="projekt">
+        <svg class="dock-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span class="dock-label">O projektu</span>
+    </a>
+    <a href="#rozsah" data-section="rozsah">
+        <svg class="dock-icon" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span class="dock-label">Rozsah</span>
+    </a>
+    <a href="#cena" data-section="cena">
+        <svg class="dock-icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span class="dock-label">Cenová nabídka</span>
+    </a>
+    <a href="#reseni" data-section="reseni">
+        <svg class="dock-icon" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        <span class="dock-label">Tech. řešení</span>
+    </a>
+    <a href="#harmonogram" data-section="harmonogram">
+        <svg class="dock-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span class="dock-label">Harmonogram</span>
+    </a>
+    <a href="#podklady" data-section="podklady">
+        <svg class="dock-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="dock-label">Předpoklady</span>
+    </a>
+    <a href="#platba" data-section="platba">
+        <svg class="dock-icon" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <span class="dock-label">Platba</span>
+    </a>
+</div>
+
+<script>
+    // SCROLL ANIMATIONS
+    document.querySelectorAll('.fade-in, .slide-left, .scale-in').forEach(function(el) {
+        el.classList.add('anim-hidden');
+    });
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('anim-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.anim-hidden').forEach(function(el) { observer.observe(el); });
+
+    // CARD ACCORDION
+    document.querySelectorAll('.acc-card').forEach(function(card) {
+        var header = card.querySelector('.acc-card-header');
+        if (!header) return;
+        header.addEventListener('click', function() {
+            card.classList.toggle('collapsed');
+        });
+    });
+
+    // PTABLE PHASE ACCORDION
+    document.querySelectorAll('.ptable-phase').forEach(function(phase) {
+        var phaseId = phase.getAttribute('data-phase');
+        var contentRows = document.querySelectorAll('[data-phase-row="' + phaseId + '"]');
+
+        if (phase.classList.contains('collapsed')) {
+            contentRows.forEach(function(row) { row.style.display = 'none'; });
+        }
+
+        phase.addEventListener('click', function() {
+            var isCollapsed = phase.classList.toggle('collapsed');
+            contentRows.forEach(function(row) {
+                row.style.display = isCollapsed ? 'none' : '';
+            });
+        });
+    });
+
+    // DOCK MENU
+    var dockEl = document.getElementById('dock-nav');
+    var menuText = document.getElementById('dock-menu-text');
+    if (dockEl && menuText) {
+        dockEl.addEventListener('mouseenter', function() { menuText.style.opacity = '0'; });
+        dockEl.addEventListener('mouseleave', function() { menuText.style.opacity = '1'; });
+    }
+    (function() {
+        var dockLinks = document.querySelectorAll('.dock-nav a');
+        var sections = [];
+        dockLinks.forEach(function(link) {
+            var id = link.getAttribute('data-section');
+            var el = document.getElementById(id);
+            if (el) sections.push({ id: id, el: el, link: link });
+        });
+        var dockObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    var s = sections.find(function(s) { return s.id === entry.target.id; });
+                    if (s) {
+                        dockLinks.forEach(function(l) { l.classList.remove('active'); });
+                        s.link.classList.add('active');
+                    }
+                }
+            });
+        }, { rootMargin: '-20% 0px -60% 0px' });
+        sections.forEach(function(s) { dockObserver.observe(s.el); });
+        dockLinks.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                var id = this.getAttribute('data-section');
+                var target = document.getElementById(id);
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    })();
+</script>
+</body>
 </html>
